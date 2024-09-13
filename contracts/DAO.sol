@@ -21,6 +21,7 @@ contract DAO {
 
 	uint256 public proposalCount;
 	mapping(uint256 => Proposal) public proposals;
+	mapping(address => mapping(uint256 => bool)) votes;
 
 	event Propose(
 		uint id,
@@ -30,6 +31,7 @@ contract DAO {
 		);
 
 	event Vote(uint256 id, address investor);
+	event Finalize(uint256 id);
 
 	constructor(Token _token, uint256 _quorum) {
 		owner = msg.sender;
@@ -47,7 +49,6 @@ contract DAO {
 		_;
 	}
 
-
 	function createProposal(
 		string memory _name,
 		uint256 _amount,
@@ -55,8 +56,6 @@ contract DAO {
 	) external onlyInvestor {
 
 		require(address(this).balance >= _amount);
-
-
 
 		proposalCount++;
 		Proposal(proposalCount, _name, _amount, _recipient, 0, false);
@@ -72,7 +71,6 @@ contract DAO {
 		emit Propose(proposalCount, _amount, _recipient, msg.sender);
 	}
 
-	mapping(address => mapping(uint256 => bool)) votes;
 
 	function vote(uint256 _id) external onlyInvestor {
 		Proposal storage proposal = proposals[_id];
@@ -84,5 +82,21 @@ contract DAO {
 		
 
 		votes[msg.sender][_id] = true;
+	}
+
+	function finalizeProposal(uint256 _id) external onlyInvestor {
+		Proposal storage proposal = proposals[_id];
+		require(proposal.finalized == false, "proposal already finalized");
+		proposal.finalized = true;
+	
+		require(address(this).balance >= proposal.amount);
+
+		require(proposal.votes >= quorum, "must reach quorum to finalize proposal");
+
+		(bool sent, ) = proposal.recipient.call{value: proposal.amount}("");
+		require(sent);
+
+		emit Finalize(_id);
+
 	}
 }
