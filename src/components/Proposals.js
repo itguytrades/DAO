@@ -1,4 +1,4 @@
-import Table from 'react-bootstrap/Table';
+ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { ethers } from 'ethers'
 
@@ -8,8 +8,9 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
       const signer = await provider.getSigner()
       const transaction = await dao.connect(signer).vote(id)
       await transaction.wait()
+      console.log(signer.address)
     } catch {
-      window.alert('User rejected or transaction reverted')
+      window.alert('User rejected or transaction reverted...Proposal')
     }
 
     setIsLoading(true)
@@ -20,6 +21,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
       const signer = await provider.getSigner()
       const transaction = await dao.connect(signer).finalizeProposal(id)
       await transaction.wait()
+      console.log(signer.address)
     } catch {
       window.alert('User rejected or transaction reverted')
     }

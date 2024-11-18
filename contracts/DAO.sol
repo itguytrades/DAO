@@ -74,7 +74,7 @@ contract DAO {
 
 	function vote(uint256 _id) external onlyInvestor {
 		Proposal storage proposal = proposals[_id];
-
+		console.log(msg.sender);
 		require(!votes[msg.sender][_id], "already voted");
 
 		proposal.votes += token.balanceOf(msg.sender);
