@@ -7,8 +7,8 @@
 const hre = require("hardhat");
 
 async function main() {
-  const NAME = 'Dapp University'
-  const SYMBOL = 'DAPP'
+  const NAME = 'CGDev Token'
+  const SYMBOL = 'CGD'
   const MAX_SUPPLY = '1000000'
 
   // Deploy Token

@@ -1,10 +1,10 @@
 import Navbar from 'react-bootstrap/Navbar';
 
-import logo from '../logo.png';
+import logo from '../CGDev.png';
 
 const Navigation = ({ account }) => {
   return (
-    <Navbar className='my-3'>
+    <Navbar className="my-3 bg-light" variant="light">
       <img
         alt="logo"
         src={logo}
@@ -12,7 +12,7 @@ const Navigation = ({ account }) => {
         height="40"
         className="d-inline-block align-top mx-3"
       />
-      <Navbar.Brand href="#">Dapp University DAO</Navbar.Brand>
+      <Navbar.Brand href="#">CGDev DAO</Navbar.Brand>
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
           {account}
